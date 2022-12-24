@@ -38,11 +38,17 @@ wget \
   -O - \
   https://de.dhv-xc.de/api/xc/login/login
 
+
+limit=2000
+# for testing:
+limit=10
+
+
 if [ ! -e schauinsland2022/flights.json ]; then
   echo "flights.json: fetching"
   wget \
 	--load-cookies cookies.txt \
-    'https://de.dhv-xc.de/api/fli/flights?y=2022&l-y=2022&fkto%5B%5D=9306&l-fkto%5B%5D=Schauinsland%20(DE)&navpars=%7B%22start%22%3A0%2C%22limit%22%3A2000%2C%22sort%22%3A%5B%7B%22field%22%3A%22FlightDuration%22%2C%22dir%22%3A-1%7D%2C%7B%22field%22%3A%22FlightDate%22%2C%22dir%22%3A-1%7D%5D%7D' \
+    "https://de.dhv-xc.de/api/fli/flights?y=2022&l-y=2022&fkto%5B%5D=9306&l-fkto%5B%5D=Schauinsland%20(DE)&navpars=%7B%22start%22%3A0%2C%22limit%22%3A$limit%2C%22sort%22%3A%5B%7B%22field%22%3A%22FlightDuration%22%2C%22dir%22%3A-1%7D%2C%7B%22field%22%3A%22FlightDate%22%2C%22dir%22%3A-1%7D%5D%7D" \
 	-O schauinsland2022/flights.json
 fi
 
