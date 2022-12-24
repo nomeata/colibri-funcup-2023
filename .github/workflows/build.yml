@@ -21,6 +21,7 @@ jobs:
         key:  website
         path: schauinsland2022
     - run: pip install -r requirements.txt
+    - run: rm -f schauinsland2022/flights.json
     - run: ./makeall.sh
       env:
         DHV_USERNAME: ${{ secrets.DHV_USERNAME }}

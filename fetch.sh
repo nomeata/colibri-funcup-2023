@@ -43,7 +43,7 @@ echo
 
 limit=2000
 # for testing:
-limit=10
+limit=100
 
 
 if [ ! -e schauinsland2022/flights.json ]; then
