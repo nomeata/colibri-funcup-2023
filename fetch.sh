@@ -53,9 +53,9 @@ if [ ! -e "schauinsland2022/$id.igc.gz" ]; then
   wget \
 	--header 'Accept: application/x-igc' \
 	--load-cookies cookies.txt \
-    "https://de.dhv-xc.de/flight/$id/igc" \
+	"https://de.dhv-xc.de/flight/$id/igc" \
 	-O "schauinsland2022/$id.igc"
-	gzip -9 "schauinsland2022/$id.igc"
+  gzip -9 "schauinsland2022/$id.igc"
 fi
 
 if [ ! -e "schauinsland2022/$id.stats.json" ]; then
@@ -64,6 +64,6 @@ if [ ! -e "schauinsland2022/$id.stats.json" ]; then
   mv "schauinsland2022/$id.stats.json.tmp" "schauinsland2022/$id.stats.json"
 fi
 
-rm -f cookies.txt
-
 done
+
+rm -f cookies.txt
