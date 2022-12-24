@@ -5,8 +5,7 @@ set -e
 pwd
 ls
 
-mkdir schauinsland2022
-mkdir schauinsland2022/out
+mkdir -p schauinsland2022/out
 ./sektoren-geojson.py > sektoren.json
 cp sektoren.json schauinsland2022/out
 ./fetch.sh
