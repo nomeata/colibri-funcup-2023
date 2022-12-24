@@ -7,7 +7,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Cache output
       uses: actions/cache@v3
-      path: schauinsland2022
+      with:
+        path: schauinsland2022
     - run: pip install -r requirements.txt
     - run: ./makeall.sh
       env:
