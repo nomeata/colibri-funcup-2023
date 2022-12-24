@@ -14,6 +14,12 @@ import landepunkt
 
 m = folium.Map(location=schaui, zoom_start=12)
 
+lines = []
+
+def point(bearing, r):
+    g = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, r)
+    return (round(g['lon2'],5), round(g['lat2'],5))
+
 radius = [r0 + dr0 * (drf**i - 1)/(drf-1) for i in range(rings) ]
 segments = [ 2**(round(math.log(2*math.pi*(radius[i]+radius[i+1])/2 / (radius[i+1]-radius[i]), 2))) for i in range(rings-1) ]
 offset = [0 for i in range(rings-1)]
@@ -23,20 +29,27 @@ for i in range(1,rings-1):
 for i in range(rings):
     r     = radius[i]
 
-    folium.Circle(
-        radius=r*1000,
-        location=schaui,
-        fill=False,
-    ).add_to(m)
+    arcpoints = 3*32 #  math.floor((r * 1000 * math.pi * 2) // 200)
+    ps = [ point(bearing * 360 / arcpoints, r*1000) for bearing in range(0, arcpoints) ]
+    ps.append(ps[0])
+    lines.append(ps)
+
     if i + 1 < rings:
         s     = segments[i]
         o     = offset[i]
         rnext = radius[i+1]
         for si in range(s):
             bearing = o + si * 360 / s
-            g1 = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, r*1e3)
-            g2 = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, rnext*1e3)
-            folium.PolyLine([(g1['lat2'],g1['lon2']), (g2['lat2'],g2['lon2'])]).add_to(m)
+            lines.append( [ point(bearing, r*1000), point(bearing, rnext*1000) ])
+
+geojson = {
+  "type": "FeatureCollection",
+  "features": [
+    # { "type": "MultiPolygon", "coordinates": [ [ps] for ps in polygons], },
+    { "type": "MultiLineString", "coordinates": lines, },
+  ]
+}
+folium.features.GeoJson(data = geojson).add_to(m)
 
 # Draw flights, note segments
 
@@ -45,7 +58,7 @@ outfile = sys.argv[1]
 for file in sys.argv[2:]:
     gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
     track = igc.parse(gunzip.stdout)
-    points = [ (p['lat'], p['lon']) for p in track ]
+    points = [ (round(p['lat'],5), round(p['lon'],5)) for p in track ]
     folium.PolyLine(points, color="crimson").add_to(m)
 
     p = landepunkt.landepunkt(track)
@@ -69,7 +82,7 @@ for (i, si) in seen:
     o     = offset[i-1]
 
     bearing = o + (si + 0.5) * 360 / s
-    g = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, (r + rnext)/2*1e3)
-    folium.CircleMarker((g['lat2'],g['lon2']),radius=10,color="green").add_to(m)
+    p = point(bearing, (r + rnext)/2*1e3)
+    folium.CircleMarker(p,radius=10,color="green").add_to(m)
 
 m.save(outfile)
