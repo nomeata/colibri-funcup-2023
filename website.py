@@ -119,7 +119,7 @@ for pid, pflights in flights.items():
         stats['drehrichtung'] = "(nach links)"
         stats['drehueberschuss'] = stats['left_turns'] - stats['right_turns']
     elif stats['left_turns'] < stats['right_turns']:
-        stats['drehrichtung'] = "(nach rights)"
+        stats['drehrichtung'] = "(nach rechts)"
         stats['drehueberschuss'] = stats['right_turns'] - stats['left_turns']
     stats['prettyflighttime'] = pretty_duration(stats['flighttime'])
 
