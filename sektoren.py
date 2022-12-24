@@ -32,7 +32,7 @@ def sektoren(track):
 
 def point(bearing, r):
     g = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, r)
-    return (round(g['lon2'],4), round(g['lat2'],4))
+    return (round(g['lon2'],5), round(g['lat2'],5))
 
 def geojson():
     lines = []
