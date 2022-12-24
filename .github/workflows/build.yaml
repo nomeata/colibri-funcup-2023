@@ -2,8 +2,8 @@ name: Build site
 on: [push]
 jobs:
   Build:
-    step:
-     - uses: actions/checkout@v3
-     - uses: actions/setup-python@v4
-     - run: pip install -r requirements.txt
-     - run: ./fetch.sh
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+    - run: pip install -r requirements.txt
+    - run: ./fetch.sh
