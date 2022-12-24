@@ -8,6 +8,9 @@ import jinja2
 import math
 import shutil
 import datetime
+import re
+
+hike_and_fly_re = re.compile(r'hike', re.IGNORECASE)
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 env = Environment(
@@ -85,6 +88,8 @@ for pid, pflights in flights.items():
     data = {}
     data['flights'] = []
     for n, f in enumerate(pflights):
+        id = f['IDFlight']
+
         # Neue sektoren
         new = set(f['stats']['sektoren']).difference(covered)
         covered.update(new)
@@ -104,12 +109,24 @@ for pid, pflights in flights.items():
             stats['schauiflights'] += 1
         if f['TakeoffWaypointName'] == "Lindenberg":
             stats['lindenflights'] += 1
-        if int(f['HasPhotos']) > 0:
+
+        is_hike = False
+        if int(f['CountComments']) > 0:
+            comments = json.load(open(f'schauinsland2022/{id}.comments.json'))
+            for c in comments['data']:
+                if bool(hike_and_fly_re.search(c["CommentText"])):
+                    is_hike = True
+
+        if is_hike:
+            stats['hikes'] += 1
+
+        has_fotos = int(f['HasPhotos']) > 0
+        if has_fotos:
             stats['fotos'] += 1
 
         data['flights'].append({
           'n': n+1,
-          'id': f['IDFlight'],
+          'id': id,
           'datum': datetime.date.fromisoformat(f['FlightDate']).strftime("%d.%m."),
           'flugzeit': pretty_duration(f['FlightDuration']),
           'linkskreise': f['stats']['left_turns'],
@@ -117,6 +134,8 @@ for pid, pflights in flights.items():
           'landepunktabstand': pretty_landepunktabstand(f['stats']['landepunktabstand']),
           'neue_sektoren': " ".join(sorted(list(new))),
           'neue_sektoren_anzahl': len(new),
+          'fotos': has_fotos,
+          'hike': is_hike,
           'url': f"https://de.dhv-xc.de/flight/{id}",
         })
 

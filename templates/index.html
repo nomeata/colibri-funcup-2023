@@ -16,19 +16,21 @@
 
 <h1>Colibri Funcup 2023</h1>
 
-<table>
+<table class="striped">
 <thead>
 <tr>
 <th>№</th>
 <th></th>
-<th>Schaui</th>
-<th>Linden</th>
-<th>⏱</th>
-<th>⟲</th>
-<th>⟳</th>
-<th>◎</th>
-<th>⌔</th>
-<th>Punkte</th>
+<th class="text-right">Schaui</th>
+<th class="text-right">Linden</th>
+<th class="text-right">⏱</th>
+<th class="text-right">⟲</th>
+<th class="text-right">⟳</th>
+<th class="text-right">◎</th>
+<th class="text-right">⌔</th>
+<th class="text-right">🥾</th>
+<th class="text-right">📷</th>
+<th class="text-right">Punkte</th>
 </tr>
 </thead>
 <tbody>
@@ -36,14 +38,16 @@
 <tr>
 <td>{{ p.rank }}</td>
 <td><a href="pilot{{p.pid}}.html"?>{{ p.name }}</a></td>
-<td>{{ p.stats.schauiflights }}</td>
-<td>{{ p.stats.lindenflights }}</td>
-<td>{{ p.stats.prettyflighttime }}</td>
-<td>{{ p.stats.left_turns }}</td>
-<td>{{ p.stats.right_turns }}</td>
-<td>{{ p.stats.landepunkt1 }} / {{ p.stats.landepunkt2 }} / {{ p.stats.landepunkt3 }} </td>
-<td>{{ p.stats.sektoren }}</td>
-<td>{{ p.points.total }}</td>
+<td class="text-right">{{ p.stats.schauiflights }}</td>
+<td class="text-right">{% if p.stats.lindenflights %}{{ p.stats.lindenflights }}{% endif %}</td>
+<td class="text-right">{{ p.stats.prettyflighttime }}</td>
+<td class="text-right">{{ p.stats.left_turns }}</td>
+<td class="text-right">{{ p.stats.right_turns }}</td>
+<td class="text-right">{{ p.stats.landepunkt1 }} / {{ p.stats.landepunkt2 }} / {{ p.stats.landepunkt3 }} </td>
+<td class="text-right">{{ p.stats.sektoren }}</td>
+<td class="text-right">{% if p.stats.hikes %}{{ p.stats.hikes }}{% endif %}</td>
+<td class="text-right">{% if p.stats.fotos %}{{ p.stats.fotos }}{% endif %}</td>
+<td class="text-right">{{ p.points.total }}</td>
 </tr>
 {% endfor %}
 </tbody></table>

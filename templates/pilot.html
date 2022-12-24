@@ -55,26 +55,30 @@
 <table class="striped">
 <thead>
 <tr>
-<th>№</th>
-<th>📆</th>
-<th>⏱</th>
-<th>⟲</th>
-<th>⟳</th>
-<th>◎</th>
-<th>⌔</th>
+<th class="text-right">№</th>
+<th class="text-right">📆</th>
+<th class="text-right">⏱</th>
+<th class="text-right">⟲</th>
+<th class="text-right">⟳</th>
+<th class="text-right">◎</th>
+<th class="text-right">⌔</th>
+<th class="text-right"></th>
+<th class="text-right"></th>
 <th><img src="static/dhv-xc.png" /></th>
 </tr>
 </thead>
 <tbody>
 {% for f in flights %}
 <tr>
-<td>{{ f.n }}</td>
-<td>{{ f.datum }}</td>
-<td>{{ f.flugzeit }}</td>
-<td>{{ f.linkskreise }}</td>
-<td>{{ f.rechtskreise }}</td>
-<td>{{ f.landepunktabstand }}</td>
-<td>{{ f.neue_sektoren_anzahl }}</td>
+<td class="text-right">{{ f.n }}</td>
+<td class="text-right">{{ f.datum }}</td>
+<td class="text-right">{{ f.flugzeit }}</td>
+<td class="text-right">{{ f.linkskreise }}</td>
+<td class="text-right">{{ f.rechtskreise }}</td>
+<td class="text-right">{{ f.landepunktabstand }}</td>
+<td class="text-right">{{ f.neue_sektoren_anzahl }}</td>
+<td class="text-center">{% if f.hike %}🥾{% endif %}</td>
+<td class="text-center">{% if f.fotos %}📷{% endif %}</td>
 <td><a href="https://de.dhv-xc.de/flight/{{ f.id }}">🔗</a></td>
 </tr>
 {% endfor %}

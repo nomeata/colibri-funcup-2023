@@ -76,4 +76,15 @@ fi
 
 done
 
+for id in $(jq -r '.data[] | select(.CountComments != "0") | .IDFlight' < schauinsland2022/flights.json | sort -n ); do
+  if [ ! -e "schauinsland2022/$id.comments.json" ]; then
+    wget \
+        --no-verbose \
+	--header 'Accept: application/x-igc' \
+	--load-cookies cookies.txt \
+	"https://de.dhv-xc.de/api/fli/comments?fkflight=$id" \
+	-O "schauinsland2022/$id.comments.json"
+  fi
+done
+
 rm -f cookies.txt
