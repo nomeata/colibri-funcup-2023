@@ -30,7 +30,7 @@ outfile = sys.argv[1]
 for file in sys.argv[2:]:
     gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
     track = igc.parse(gunzip.stdout)
-    points = [ (round(p['lat'],5), round(p['lon'],5)) for p in track ]
+    points = [ (round(p['lat'],4), round(p['lon'],4)) for p in track ]
     folium.PolyLine(points, color="crimson").add_to(m)
 
     p = landepunkt.landepunkt(track)
