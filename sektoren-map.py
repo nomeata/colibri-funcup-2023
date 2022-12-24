@@ -55,6 +55,6 @@ for (i, si) in seen:
 
     bearing = o + (si + 0.5) * 360 / s
     p = sektoren.point(bearing, (r + rnext)/2*1e3)
-    folium.CircleMarker(p,radius=10,color="green").add_to(m)
+    folium.CircleMarker((p[1], p[0]),radius=10,color="green").add_to(m)
 
 m.save(outfile)
