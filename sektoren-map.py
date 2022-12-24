@@ -11,7 +11,14 @@ from constants import *
 import sektoren
 import landepunkt
 
-m = folium.Map(location=schaui, zoom_start=12)
+
+m = folium.Map(
+    location=schaui,
+    zoom_start=12,
+    tiles = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    maxZoom = 17,
+    attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    )
 
 # Draw sektoren
 folium.features.GeoJson(data = "sektoren.json", embed=False).add_to(m)
