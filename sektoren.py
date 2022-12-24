@@ -44,10 +44,10 @@ def midpoint(s):
     if s[0] == 0:
         return schaui
     else:
-        r     = radius[i-1]
-        rnext = radius[i]
-        segs  = segments[i-1]
-        o     = offset[i-1]
+        r     = radius[s[0]-1]
+        rnext = radius[s[0]]
+        segs  = segments[s[0]-1]
+        o     = offset[s[0]-1]
 
         bearing = o + (s[1] + 0.5) * 360 / segs
         return point(bearing, (r + rnext)/2*1e3)
