@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta charset="utf-8">
 <link rel="stylesheet" href="https://unpkg.com/chota@latest">
 <title>Colibri Funcup 2023</title>
 </head>
@@ -20,6 +21,8 @@
 <tr>
 <th>№</th>
 <th></th>
+<th>Schaui</th>
+<th>Linden</th>
 <th>⏱</th>
 <th>⟲</th>
 <th>⟳</th>
@@ -33,6 +36,8 @@
 <tr>
 <td>{{ p.rank }}</td>
 <td><a href="pilot{{p.pid}}.html"?>{{ p.name }}</a></td>
+<td>{{ p.stats.schauiflights }}</td>
+<td>{{ p.stats.lindenflights }}</td>
 <td>{{ p.stats.prettyflighttime }}</td>
 <td>{{ p.stats.left_turns }}</td>
 <td>{{ p.stats.right_turns }}</td>
