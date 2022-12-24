@@ -8,6 +8,7 @@ jobs:
     - name: Cache output
       uses: actions/cache@v3
       with:
+        key:  website
         path: schauinsland2022
     - run: pip install -r requirements.txt
     - run: ./makeall.sh
