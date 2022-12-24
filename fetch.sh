@@ -11,12 +11,17 @@ for id in $(jq -r '.data[]["IDFlight"]' < schauinsland2022/flights.json); do
 
 if [ ! -e "schauinsland2022/$id.igc.gz" ]; then
   echo "$id: fetching"
-  wget --header 'Cookie: xclogin=3ac0e635c772f3580d2a36581e66dcf33d3c4f7ff1ce365076736491d707e984; xcsid=f20b8ec9857850fb79704a60868fa4cb' "https://de.dhv-xc.de/flight/$id/igc" -O - | gzip -9 -> "schauinsland2022/$id.igc.gz"
+  wget \
+	--header 'Accept: application/x-igc' \
+    --header 'Cookie: xclogin=71687891d25ab74168ddbe45ac2a1ab17fe8e2fa20cb1065489373bc547fb00e; xcsid=d40963b9be6c432cb79d01534e3d4dec' "https://de.dhv-xc.de/flight/$id/igc" \
+	-O "schauinsland2022/$id.igc"
+	gzip -9 "schauinsland2022/$id.igc"
 fi
 
 if [ ! -e "schauinsland2022/$id.stats.json" ]; then
   echo "$id: stats"
-  ./flightstats.py -i "schauinsland2022/$id.igc.gz" > "schauinsland2022/$id.stats.json"
+  ./flightstats.py -i "schauinsland2022/$id.igc.gz" > "schauinsland2022/$id.stats.json.tmp"
+  mv "schauinsland2022/$id.stats.json.tmp" "schauinsland2022/$id.stats.json"
 fi
 
 done

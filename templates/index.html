@@ -1,0 +1,47 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://unpkg.com/chota@latest">
+<title>Colibri Funcup 2023</title>
+</head>
+<body>
+<div class="container">
+<nav class="nav">
+  <div class="nav-center">
+    <a class="brand" href="index.html">
+      <img style="max-height:10rem" src="static/icon.png" alt="">
+    </a>
+  </div>
+</nav>
+
+<h1>Colibri Funcup 2023</h1>
+
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th></th>
+<th>⏱</th>
+<th>⟲</th>
+<th>⟳</th>
+<th>◎</th>
+<th>⌔</th>
+<th>Punkte</th>
+</tr>
+</thead>
+<tbody>
+{% for p in pilots %}
+<tr>
+<td>{{ p.rank }}</td>
+<td><a href="pilot{{p.pid}}.html"?>{{ p.name }}</a></td>
+<td>{{ p.stats.prettyflighttime }}</td>
+<td>{{ p.stats.left_turns }}</td>
+<td>{{ p.stats.right_turns }}</td>
+<td>{{ p.stats.landepunkt1 }} / {{ p.stats.landepunkt2 }} / {{ p.stats.landepunkt3 }} </td>
+<td>{{ p.stats.sektoren }}</td>
+<td>{{ p.points.total }}</td>
+</tr>
+{% endfor %}
+</tbody></table>
+</body>
+</div>
+</html>

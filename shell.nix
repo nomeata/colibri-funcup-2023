@@ -14,5 +14,7 @@ stdenv.mkDerivation rec {
     python3Packages.shapely
     python3Packages.geopy
     python3Packages.geographiclib
+    python3Packages.snakeviz
+    python3Packages.jinja2
   ];
 }

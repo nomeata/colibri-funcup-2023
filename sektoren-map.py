@@ -6,7 +6,7 @@ from geographiclib.geodesic import Geodesic
 import math
 import sys
 import subprocess
-import gpxpy
+import igc
 
 from constants import *
 import sektoren
@@ -41,17 +41,17 @@ for i in range(rings):
 # Draw flights, note segments
 
 seen = set()
-for file in sys.argv[1:]:
+outfile = sys.argv[1]
+for file in sys.argv[2:]:
     gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
-    gpsbabel = subprocess.Popen(('gpsbabel', '-i', 'igc', '-o', 'gpx', '-f', '-', '-F', '-'), stdin=gunzip.stdout, stdout=subprocess.PIPE)
-    gpx = gpxpy.parse(gpsbabel.stdout)
-    points = [ (point.latitude, point.longitude) for track in gpx.tracks if track.name != "PRESALTTRK" for segment in track.segments for point in segment.points ]
+    track = igc.parse(gunzip.stdout)
+    points = [ (p['lat'], p['lon']) for p in track ]
     folium.PolyLine(points, color="crimson").add_to(m)
 
-    p = landepunkt.landepunkt(gpx)
+    p = landepunkt.landepunkt(track)
     folium.Marker(p).add_to(m)
 
-    seen.update(sektoren.sektoren(gpx))
+    seen.update(sektoren.sektoren(track))
 
 # mark segments
 for (i, si) in seen:
@@ -72,4 +72,4 @@ for (i, si) in seen:
     g = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, (r + rnext)/2*1e3)
     folium.CircleMarker((g['lat2'],g['lon2']),radius=10,color="green").add_to(m)
 
-m.save("sektoren.html")
+m.save(outfile)

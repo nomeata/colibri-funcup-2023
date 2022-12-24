@@ -6,11 +6,10 @@ from constants import *
 def sektorname(s):
     return chr(ord('A') + s[0]) + str(s[1]+1)
 
-def sektoren(gpx):
+def sektoren(track):
     seen = set()
-    points = [ (point.latitude, point.longitude) for track in gpx.tracks if track.name != "PRESALTTRK" for segment in track.segments for point in segment.points ]
-    for point in points:
-        g = Geodesic.WGS84.Inverse(schaui[0], schaui[1],  point[0], point[1])
+    for point in track:
+        g = Geodesic.WGS84.Inverse(schaui[0], schaui[1],  point['lat'], point['lon'])
         phi = g['azi1']
         d = g['s12']/1000
 

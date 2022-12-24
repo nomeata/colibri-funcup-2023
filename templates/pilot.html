@@ -1,0 +1,83 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://unpkg.com/chota@latest">
+<title>Colibri Funcup 2023 – {{name}}</title>
+</head>
+<body>
+<div class="container">
+<nav class="nav">
+  <div class="nav-center">
+    <a class="brand" href="index.html">
+      <img style="max-height:10rem" src="static/icon.png" alt="">
+    </a>
+  </div>
+</nav>
+
+<h1>Colibri Funcup 2023 – {{name}}</h1>
+
+<h2>Statistiken</h2>
+
+
+<table>
+<thead>
+<tr>
+<th>Kategorie</th>
+<th>Wert</th>
+<th>Punkte</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Flüge am Schauinsland</td><td>{{ stats.schauiflights }}</td><td> {{ points.schauiflights }}</td></tr>
+<tr><td>Flüge am Lindenberg</td><td>{{ stats.lindenflights }}</td><td> {{ points.lindenflights }}</td></tr>
+<tr><td>Flugzeit</td><td>{{ stats.prettyflighttime }}</td><td> {{ points.flighttime }}</td></tr>
+<tr><td>Hike and fly</td><td>{{ stats.hikes }}</td><td> {{ points.hikes }}</td></tr>
+<tr><td>Fotos</td><td>{{ stats.fotos }}</td><td> {{ points.fotos }}</td></tr>
+<tr><td>Überflogene Sektoren</td><td>{{ stats.sektoren }}</td><td> {{ points.sektoren }}</td></tr>
+<tr><td>Landepunkttreffer &lt; 10m</td><td>{{ stats.landepunkt1 }}</td><td> {{ points.landepunkt1 }}</td></tr>
+<tr><td>Landepunkttreffer &lt; 25m</td><td>{{ stats.landepunkt2 }}</td><td> {{ points.landepunkt2 }}</td></tr>
+<tr><td>Landepunkttreffer &lt; 100m</td><td>{{ stats.landepunkt3 }}</td><td> {{ points.landepunkt3 }}</td></tr>
+<tr><td>Drehüberschuss {{ stats.drehrichtung}}</td><td>{{ stats.drehueberschuss }}</td><td> {{ points.drehueberschuss }}</td></tr>
+</tbody>
+<tfoot>
+<tr><td><b>Gesamt</b></td><td></td><td><b>{{ points.total }}</b></td></tr>
+</tfoot>
+<table>
+
+<h2>Karte <a href="map{{pid}}.html">↪</a></h2>
+
+<figure>
+<iframe src="map{{ pid }}.html" width="100%" height="50%"/></iframe>
+<figcaption>Alle Flüge, mit Sektoren und Landepunkten</figcaption>
+</figure>
+
+<h2>Flüge</h2>
+<table class="striped">
+<thead>
+<tr>
+<th>№</th>
+<th>📆</th>
+<th>⏱</th>
+<th>⟲</th>
+<th>⟳</th>
+<th>◎</th>
+<th>⌔</th>
+<th><img src="static/dhv-xc.png" /></th>
+</tr>
+</thead>
+<tbody>
+{% for f in flights %}
+<tr>
+<td>{{ f.n }}</td>
+<td>{{ f.datum }}</td>
+<td>{{ f.flugzeit }}</td>
+<td>{{ f.linkskreise }}</td>
+<td>{{ f.rechtskreise }}</td>
+<td>{{ f.landepunktabstand }}</td>
+<td>{{ f.neue_sektoren_anzahl }}</td>
+<td><a href="https://de.dhv-xc.de/flight/{{ f.id }}">🔗</a></td>
+</tr>
+{% endfor %}
+</tbody></table>
+</body>
+</div>
+</html>
