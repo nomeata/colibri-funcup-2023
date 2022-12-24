@@ -2,9 +2,6 @@
 
 set -e
 
-pwd
-ls
-
 mkdir -p schauinsland2022/out
 ./sektoren-geojson.py > sektoren.json
 cp sektoren.json schauinsland2022/out
