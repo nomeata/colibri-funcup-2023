@@ -100,6 +100,11 @@ for pid, pflights in flights.items():
         elif f['stats']['landepunktabstand'] < 100:
             stats['landepunkt3'] += 1
 
+        if f['TakeoffWaypointName'] == "Schauinsland":
+            stats['schauiflights'] += 1
+        if f['TakeoffWaypointName'] == "Lindenberg":
+            stats['lindenflights'] += 1
+
         data['flights'].append({
           'n': n+1,
           'id': f['IDFlight'],
