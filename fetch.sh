@@ -20,6 +20,7 @@ fi
 rm -f cookies.txt
 rm -f status.json
 wget \
+  --no-verbose \
   --save-cookies cookies.txt \
   --keep-session-cookies \
   https://de.dhv-xc.de/api/xc/login/status\
@@ -30,6 +31,7 @@ echo "Token: $token"
 rm -f status.json
 
 wget \
+  --no-verbose \
   --save-cookies cookies.txt \
   --load-cookies cookies.txt \
   --keep-session-cookies \
@@ -37,7 +39,7 @@ wget \
   --header "X-Csrf-Token: $token" \
   -O - \
   https://de.dhv-xc.de/api/xc/login/login
-
+echo
 
 limit=2000
 # for testing:
@@ -47,6 +49,7 @@ limit=10
 if [ ! -e schauinsland2022/flights.json ]; then
   echo "flights.json: fetching"
   wget \
+        --no-verbose \
 	--load-cookies cookies.txt \
     "https://de.dhv-xc.de/api/fli/flights?y=2022&l-y=2022&fkto%5B%5D=9306&l-fkto%5B%5D=Schauinsland%20(DE)&navpars=%7B%22start%22%3A0%2C%22limit%22%3A$limit%2C%22sort%22%3A%5B%7B%22field%22%3A%22FlightDuration%22%2C%22dir%22%3A-1%7D%2C%7B%22field%22%3A%22FlightDate%22%2C%22dir%22%3A-1%7D%5D%7D" \
 	-O schauinsland2022/flights.json
@@ -57,6 +60,7 @@ for id in $(jq -r '.data[]["IDFlight"]' < schauinsland2022/flights.json); do
 if [ ! -e "schauinsland2022/$id.igc.gz" ]; then
   echo "$id: fetching"
   wget \
+        --no-verbose \
 	--header 'Accept: application/x-igc' \
 	--load-cookies cookies.txt \
 	"https://de.dhv-xc.de/flight/$id/igc" \
