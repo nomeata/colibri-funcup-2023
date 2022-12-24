@@ -1,5 +1,15 @@
 name: Build site
 on: [push]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -15,3 +25,13 @@ jobs:
       env:
         DHV_USERNAME: ${{ secrets.DHV_USERNAME }}
         DHV_PASSWORD: ${{ secrets.DHV_PASSWORD }}
+    - name: Setup Pages
+      uses: actions/configure-pages@v2
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        # Upload entire repository
+        path: 'schauinsland2022/out'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
