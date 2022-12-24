@@ -3,6 +3,9 @@ from geographiclib.geodesic import Geodesic
 
 window_size = 5
 
+def roundcoord(c):
+    return (round(c['lat'], 6), round(c['lon'],6))
+
 def landepunkt(ps):
 
     # first time in the last track points where speed is less than 5km/s
@@ -15,9 +18,9 @@ def landepunkt(ps):
         dt = window[-1]['time'] - window[0]['time']
         v = ds/dt
         if abs(v) < 1:
-            return (ps[i]['lat'], ps[i]['lon'])
+            return roundcoord(ps[i])
 
-    return (ps[-1]['lat'], ps[-1]['lon'])
+    return roundcoord(ps[-1])
 
     # for i in range(len(ps)-1, 1, -1):
     #     dt = (ps[i].time - ps[i-1]['time']).seconds
@@ -25,8 +28,8 @@ def landepunkt(ps):
     #     if dt > 0 and abs(dh/dt) > constants.flightstop:
     #         return (ps[i]['lat'], ps[i]['lon'])
 
-def landepunktabstand(gpx):
-    (lat, lon) = landepunkt(gpx)
+def landepunktabstand(punkt):
+    (lat, lon) = punkt
     g = Geodesic.WGS84.Inverse(constants.landepunkt[0], constants.landepunkt[1], lat, lon)
     return round(g['s12'])
 

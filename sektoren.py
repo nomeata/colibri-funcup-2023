@@ -6,6 +6,12 @@ from constants import *
 def sektorname(s):
     return chr(ord('A') + s[0]) + str(s[1]+1)
 
+def parsesektorname(s):
+    i = ord(s[0]) - ord('A')
+    si = int(s[1:]) - 1
+    assert s == sektorname((i, si))
+    return (i,si)
+
 def sektoren(track):
     seen = set()
     for point in track:
@@ -33,6 +39,18 @@ def sektoren(track):
 def point(bearing, r):
     g = Geodesic.WGS84.Direct(schaui[0], schaui[1], bearing, r)
     return (round(g['lon2'],5), round(g['lat2'],5))
+
+def midpoint(s):
+    if s[0] == 0:
+        return schaui
+    else:
+        r     = radius[i-1]
+        rnext = radius[i]
+        segs  = segments[i-1]
+        o     = offset[i-1]
+
+        bearing = o + (s[1] + 0.5) * 360 / segs
+        return point(bearing, (r + rnext)/2*1e3)
 
 def geojson():
     lines = []

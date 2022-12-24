@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 import folium
-# import geopy.distance
-from geographiclib.geodesic import Geodesic
 import math
 import sys
 import subprocess
 import igc
+import json
 
 from constants import *
 import sektoren
@@ -14,47 +13,28 @@ import landepunkt
 
 m = folium.Map(location=schaui, zoom_start=12)
 
+# Draw sektoren
 folium.features.GeoJson(data = "sektoren.json", embed=False).add_to(m)
 
-radius = [r0 + dr0 * (drf**i - 1)/(drf-1) for i in range(rings) ]
-segments = [ 2**(round(math.log(2*math.pi*(radius[i]+radius[i+1])/2 / (radius[i+1]-radius[i]), 2))) for i in range(rings-1) ]
-offset = [0 for i in range(rings-1)]
-for i in range(1,rings-1):
-    offset[i] = offset[i-1] + 0.5 * 260/segments[i]
-
-
-# Draw flights, note segments
-
+# Draw flights
 seen = set()
 outfile = sys.argv[1]
 for file in sys.argv[2:]:
+    # Track
     gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
     track = igc.parse(gunzip.stdout)
-    points = [ (round(p['lat'],5), round(p['lon'],5)) for p in track ]
+    points = [ (round(p['lat'],5), round(p['lon'],5)) for p in track ][::5]
     folium.PolyLine(points, color="crimson").add_to(m)
 
-    p = landepunkt.landepunkt(track)
-    folium.Marker(p).add_to(m)
-
-    seen.update(sektoren.sektoren(track))
+    # Draw Landepunkt
+    stats = json.load(open(file.removesuffix('.igc.gz') + '.stats.json'))
+    folium.Marker(stats['landepunkt']).add_to(m)
+    # Remember segments
+    seen.update(stats['sektoren'])
 
 # mark segments
-for (i, si) in seen:
-  if i == 0:
-    folium.CircleMarker(
-        radius=10,
-        location=schaui,
-        color="green",
-        fill=True,
-    ).add_to(m)
-  else:
-    r     = radius[i-1]
-    rnext = radius[i]
-    s     = segments[i-1]
-    o     = offset[i-1]
-
-    bearing = o + (si + 0.5) * 360 / s
-    p = sektoren.point(bearing, (r + rnext)/2*1e3)
-    folium.CircleMarker((p[1], p[0]),radius=10,color="green").add_to(m)
+for s in seen:
+  p = sektoren.midpoint(sektoren.parsesektorname(s))
+  folium.CircleMarker(radius=10, location=p, color="green", fill=True).add_to(m)
 
 m.save(outfile)

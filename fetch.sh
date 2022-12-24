@@ -55,7 +55,7 @@ if [ ! -e schauinsland2022/flights.json ]; then
 	-O schauinsland2022/flights.json
 fi
 
-for id in $(jq -r '.data[]["IDFlight"]' < schauinsland2022/flights.json); do
+for id in $(jq -r '.data[]["IDFlight"]' < schauinsland2022/flights.json | sort -n ); do
 
 if [ ! -e "schauinsland2022/$id.igc.gz" ]; then
   echo "$id: fetching"
