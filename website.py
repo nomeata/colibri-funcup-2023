@@ -104,6 +104,8 @@ for pid, pflights in flights.items():
             stats['schauiflights'] += 1
         if f['TakeoffWaypointName'] == "Lindenberg":
             stats['lindenflights'] += 1
+        if int(f['HasPhotos']) > 0:
+            stats['fotos'] += 1
 
         data['flights'].append({
           'n': n+1,
