@@ -1,23 +1,7 @@
-<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://unpkg.com/chota@latest">
-<title>Colibri Funcup 2023</title>
-.td { white-space: nowrap; }
-</head>
-<body>
-<main class="container">
-<nav class="nav">
-  <div class="nav-center">
-    <a class="brand" href="index.html">
-      <img style="max-height:10rem" src="static/icon.png" alt="">
-    </a>
-  </div>
-</nav>
-
-<h1>Colibri Funcup 2023</h1>
+{% extends "base.html" %}
+{% block title %}Colibri Funcup 2023{% endblock %}
+{% block h1 %}Colibri Funcup 2023{% endblock %}
+{% block content %}
 
 <table class="striped">
 <thead>
@@ -55,5 +39,5 @@
 {% endfor %}
 </tbody></table>
 </body>
-</main>
-</html>
+
+{% endblock %}
