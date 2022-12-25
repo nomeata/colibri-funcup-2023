@@ -8,7 +8,7 @@ def roundcoord(c):
 
 def landepunkt(ps):
 
-    # first time in the last track points where speed is less than 5km/s
+    # first time in the last track points where speed is less than 1m/s
     for i in range(max(0,len(ps)-420), len(ps)-window_size):
         # average over n samples
         window = ps[i:i+window_size]

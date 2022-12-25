@@ -16,7 +16,7 @@ def parse(f):
              validity, press_alt, gnss_alt,
              extras) = match.groups()
 
-            seconds = 360*int(hours) + 60*int(minutes) + int(seconds)
+            seconds = 3600*int(hours) + 60*int(minutes) + int(seconds)
 
             lat = float(lat_deg) + float(lat_min) / 60.0 + float(lat_min_dec) / 1000.0 / 60.0
             if lat_sign == 'S': lat = -lat
