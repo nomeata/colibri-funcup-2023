@@ -9,6 +9,10 @@ import math
 import shutil
 import datetime
 import re
+import pandas as pd
+import folium
+
+import constants
 
 hike_and_fly_re = re.compile(r'hike', re.IGNORECASE)
 
@@ -63,6 +67,8 @@ for pid, pflights in flights.items():
 # Create per pilot website, and gather stats
 pilots = []
 pilottemplate = env.get_template("pilot.html")
+sektor_pilots = {}
+sektor_flights = {}
 for pid, pflights in flights.items():
     name = pflights[0]['FirstName'] + ' ' + pflights[0]['LastName']
     covered = set()
@@ -90,8 +96,14 @@ for pid, pflights in flights.items():
     for n, f in enumerate(pflights):
         id = f['IDFlight']
 
+        sektoren = f['stats']['sektoren']
+        for s in sektoren:
+            if s not in sektor_flights:
+                sektor_flights[s] = 0
+            sektor_flights[s] += 1
+
         # Neue sektoren
-        new = set(f['stats']['sektoren']).difference(covered)
+        new = set(sektoren).difference(covered)
         covered.update(new)
 
         # update stats
@@ -149,6 +161,10 @@ for pid, pflights in flights.items():
         stats['drehueberschuss'] = stats['right_turns'] - stats['left_turns']
     stats['prettyflighttime'] = pretty_duration(stats['flighttime'])
 
+    for s in covered:
+        if s not in sektor_pilots:
+            sektor_pilots[s] = 0
+        sektor_pilots[s] += 1
 
     # Calculate points
     points = {
@@ -192,3 +208,27 @@ data['pilots'] = pilots
 env.get_template("index.html") \
   .stream(data) \
   .dump(open(f'schauinsland2022/out/index.html', 'w'))
+
+# Write main map
+
+m = folium.Map(
+    location=constants.schaui,
+    zoom_start=12,
+    tiles = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    maxZoom = 17,
+    attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    )
+# Draw sektoren
+folium.features.Choropleth(
+ geo_data = "sektoren.json",
+ key_on = 'feature.id',
+ columns = ['sektor', 'pilots'],
+ data = pd.DataFrame({'sektor': sektor_pilots.keys(), 'pilots': sektor_pilots.values()}),
+ fill_color = 'Blues',
+ nan_fill_opacity = 0.2,
+ legend_name = "Piloten, die diesen Sektor erreicht haben",
+ overlay = False,
+).add_to(m)
+
+
+m.save("schauinsland2022/out/map.html")

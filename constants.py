@@ -16,4 +16,4 @@ radius = [r0 + dr0 * (drf**i - 1)/(drf-1) for i in range(rings) ]
 segments = [ 2**(round(math.log(2*math.pi*(radius[i]+radius[i+1])/2 / (radius[i+1]-radius[i]), 2))) for i in range(rings-1) ]
 offset = [0 for i in range(rings-1)]
 for i in range(1,rings-1):
-    offset[i] = offset[i-1] + 0.5 * 260/segments[i]
+    offset[i] = offset[i-1] + 0.5 * 360/segments[i]

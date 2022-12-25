@@ -42,6 +42,6 @@ for file in sys.argv[2:]:
 # mark segments
 for s in seen:
   p = sektoren.midpoint(sektoren.parsesektorname(s))
-  folium.CircleMarker(radius=10, location=(p[1], p[0]), color="green", fill=True).add_to(m)
+  folium.CircleMarker(radius=10, location=p, color="green", fill=True).add_to(m)
 
 m.save(outfile)
