@@ -20,9 +20,9 @@
 <tr><td>Hike and fly</td><td>{{ stats.hikes }}</td><td> {{ points.hikes }}</td></tr>
 <tr><td>Fotos</td><td>{{ stats.fotos }}</td><td> {{ points.fotos }}</td></tr>
 <tr><td>Überflogene Sektoren</td><td>{{ stats.sektoren }}</td><td> {{ points.sektoren }}</td></tr>
-<tr><td>Landepunkttreffer &lt; 10m</td><td>{{ stats.landepunkt1 }}</td><td> {{ points.landepunkt1 }}</td></tr>
-<tr><td>Landepunkttreffer &lt; 25m</td><td>{{ stats.landepunkt2 }}</td><td> {{ points.landepunkt2 }}</td></tr>
-<tr><td>Landepunkttreffer &lt; 100m</td><td>{{ stats.landepunkt3 }}</td><td> {{ points.landepunkt3 }}</td></tr>
+<tr><td>Landepunkttreffer &lt; {{ lpradius1 }}m</td><td>{{ stats.landepunkt1 }}</td><td> {{ points.landepunkt1 }}</td></tr>
+<tr><td>Landepunkttreffer &lt; {{ lpradius2 }}m</td><td>{{ stats.landepunkt2 }}</td><td> {{ points.landepunkt2 }}</td></tr>
+<tr><td>Landepunkttreffer &lt; {{ lpradius3 }}m</td><td>{{ stats.landepunkt3 }}</td><td> {{ points.landepunkt3 }}</td></tr>
 <tr><td>Drehüberschuss {{ stats.drehrichtung}}</td><td>{{ stats.drehueberschuss }}</td><td> {{ points.drehueberschuss }}</td></tr>
 </tbody>
 <tfoot>

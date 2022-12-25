@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pandas as pd
 import folium
 import math
 import sys
@@ -7,10 +8,27 @@ import subprocess
 import igc
 import json
 
+import constants
 from constants import *
 import sektoren
 import landepunkt
 
+outfile = sys.argv[1]
+
+# Read flights
+tracks = []
+seen = set()
+lps = []
+for file in sys.argv[2:]:
+    # Track
+    gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
+    track = igc.parse(gunzip.stdout)
+    tracks += [ [(round(p['lat'],5), round(p['lon'],5)) for p in track ][::5] ]
+
+    # Remember landepunkte and segments
+    stats = json.load(open(file.removesuffix('.igc.gz') + '.stats.json'))
+    lps += [ stats['landepunkt'] ]
+    seen.update(stats['sektoren'])
 
 m = folium.Map(
     location=schaui,
@@ -21,27 +39,30 @@ m = folium.Map(
     )
 
 # Draw sektoren
-folium.features.GeoJson(data = "sektoren.json", embed=False).add_to(m)
+# Only draw those that are actually seen
+def style_function(feature):
+    if feature['id'] in seen:
+        return { 'weight': 2 }
+    else:
+        return {'fill': False, 'stroke': False}
 
-# Draw flights
-seen = set()
-outfile = sys.argv[1]
-for file in sys.argv[2:]:
-    # Track
-    gunzip = subprocess.Popen(('gunzip',), stdin=open(file), stdout=subprocess.PIPE)
-    track = igc.parse(gunzip.stdout)
-    points = [ (round(p['lat'],5), round(p['lon'],5)) for p in track ][::5]
-    folium.PolyLine(points, color="crimson").add_to(m)
+folium.features.GeoJson(
+ data = "sektoren.json",
+ style_function = style_function,
+ overlay = False,
+).add_to(m)
 
-    # Draw Landepunkt
-    stats = json.load(open(file.removesuffix('.igc.gz') + '.stats.json'))
-    folium.Marker(stats['landepunkt']).add_to(m)
-    # Remember segments
-    seen.update(stats['sektoren'])
+# Draw target
+for r in [lpradius1, lpradius2, lpradius3]:
+    folium.Circle(radius = r, location=constants.landepunkt, color = 'green', fill=True).add_to(m)
 
-# mark segments
-for s in seen:
-  p = sektoren.midpoint(sektoren.parsesektorname(s))
-  folium.CircleMarker(radius=10, location=p, color="green", fill=True).add_to(m)
+# Draw tracks
+for track in tracks:
+    folium.PolyLine([track], color="crimson").add_to(m)
+
+# Draw Landepunkt
+for lp in lps:
+    folium.Circle(radius = 3, location = lp, color="black", fill=True, fill_opacity = 1, stroke=False).add_to(m)
+
 
 m.save(outfile)

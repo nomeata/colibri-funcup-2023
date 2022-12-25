@@ -92,6 +92,9 @@ for pid, pflights in flights.items():
 
 
     data = {}
+    data['lpradius1'] = constants.lpradius1
+    data['lpradius2'] = constants.lpradius2
+    data['lpradius3'] = constants.lpradius3
     data['flights'] = []
     for n, f in enumerate(pflights):
         id = f['IDFlight']
@@ -110,11 +113,11 @@ for pid, pflights in flights.items():
         stats['flighttime'] += int(f['FlightDuration'])
         stats['left_turns'] += f['stats']['left_turns']
         stats['right_turns'] += f['stats']['right_turns']
-        if f['stats']['landepunktabstand'] < 10:
+        if f['stats']['landepunktabstand'] < constants.lpradius1:
             stats['landepunkt1'] += 1
-        elif f['stats']['landepunktabstand'] < 25:
+        elif f['stats']['landepunktabstand'] < constants.lpradius2:
             stats['landepunkt2'] += 1
-        elif f['stats']['landepunktabstand'] < 100:
+        elif f['stats']['landepunktabstand'] < constants.lpradius3:
             stats['landepunkt3'] += 1
 
         if f['TakeoffWaypointName'] == "Schauinsland":
