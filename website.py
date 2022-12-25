@@ -233,5 +233,8 @@ folium.features.Choropleth(
  overlay = False,
 ).add_to(m)
 
+# Draw target
+for r in [constants.lpradius1, constants.lpradius2, constants.lpradius3]:
+    folium.Circle(radius = r, location=constants.landepunkt, color = 'green', fill=True).add_to(m)
 
 m.save("schauinsland2022/out/map.html")
