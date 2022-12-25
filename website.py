@@ -126,7 +126,7 @@ for pid, pflights in flights.items():
             stats['lindenflights'] += 1
 
         is_hike = False
-        if int(f['CountComments']) > 0:
+        if f['TakeoffWaypointName'] == "Schauinsland" and int(f['CountComments']) > 0:
             comments = json.load(open(f'schauinsland2022/{id}.comments.json'))
             for c in comments['data']:
                 if bool(hike_and_fly_re.search(c["CommentText"])):
