@@ -2,6 +2,10 @@
 
 set -e
 
+
+# For testing
+limit=20
+
 echo "flights.json: fetching"
 wget \
     --no-verbose \
