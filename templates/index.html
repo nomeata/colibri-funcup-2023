@@ -12,6 +12,7 @@
 </figure>
 </section>
 
+{% if pilots %}
 <section>
 <h2>Ranking</h2>
 
@@ -52,5 +53,18 @@
 </tbody></table>
 </body>
 </section>
+
+{% else %}
+
+<section class="row is-center">
+<div class="col-6 card">
+  <header>
+  <h2>Noch keine Flüge</h2>
+  </header>
+  <p>Geh doch fliegen und sei der erste!</p>
+</div>
+</section>
+
+{% endif %}
 
 {% endblock %}
