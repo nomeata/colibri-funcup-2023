@@ -67,7 +67,10 @@ for pid, pflights in flights.items():
     pflights.sort(key = lambda f: f['FlightStartTime'])
 
 # Latest flight
-latest_flight = max([f['FlightStartTime'] for f in flight_data['data']])
+if flight_data['data']:
+    latest_flight = max([f['FlightStartTime'] for f in flight_data['data']])
+else:
+    latest_flight = "(noch keinen gesehen)"
 
 # Create per pilot website, and gather stats
 pilots = []
