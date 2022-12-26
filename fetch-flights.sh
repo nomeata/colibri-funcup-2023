@@ -2,7 +2,6 @@
 
 set -e
 
-
 # For testing
 limit=20
 
