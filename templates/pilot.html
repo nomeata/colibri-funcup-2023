@@ -3,6 +3,7 @@
 {% block h1 %}Colibri Funcup 2023 – {{name}}{% endblock %}
 {% block content %}
 
+<section>
 <h2>Statistiken</h2>
 
 <table>
@@ -29,14 +30,18 @@
 <tr><td><b>Gesamt</b></td><td></td><td><b>{{ points.total }}</b></td></tr>
 </tfoot>
 <table>
+</section>
 
+<section>
 <h2>Karte <a href="map{{pid}}.html">↪</a></h2>
 
 <figure>
 <iframe src="map{{ pid }}.html" style="width:100%; aspect-ratio: 16/9;"/></iframe>
 <figcaption>Alle Flüge, mit Sektoren und Landepunkten</figcaption>
 </figure>
+</section>
 
+<section>
 <h2>Flüge</h2>
 <table class="striped">
 <thead>
@@ -69,5 +74,6 @@
 </tr>
 {% endfor %}
 </tbody></table>
+</section>
 
 {% endblock %}

@@ -14,7 +14,7 @@ import folium
 
 import constants
 
-now = datetime.datetime.now().strftime("%m.%d.%Y %H:%M")
+now = datetime.datetime.now().strftime("%Y-%d-%m %H:%M:%S")
 
 hike_and_fly_re = re.compile(r'hike', re.IGNORECASE)
 
