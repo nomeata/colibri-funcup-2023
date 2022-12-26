@@ -1,7 +1,8 @@
-schauinsland2022/
-schauinsland2022.csv
-*.igc.gz
 sektoren.html
-cookies.txt
-status.json
 sektoren.json
+
+_flights
+_out
+_stats
+_tmp
+__pycache__

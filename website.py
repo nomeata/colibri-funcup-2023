@@ -40,12 +40,12 @@ def pretty_landepunktabstand(d):
 # prepare output directory
 
 try:
-    os.mkdir('schauinsland2022/out')
+    os.mkdir('_out')
 except FileExistsError:
     pass
-shutil.copytree('templates/static', 'schauinsland2022/out/static', dirs_exist_ok=True)
+shutil.copytree('templates/static', '_out/static', dirs_exist_ok=True)
 
-flight_data = json.load(open('schauinsland2022/flights.json'))
+flight_data = json.load(open('_tmp/flights.json'))
 
 flights = {}
 
@@ -54,7 +54,7 @@ for flight in flight_data['data']:
     id = flight['IDFlight']
     pid = flight['FKPilot']
 
-    flight['stats'] = json.load(open(f'schauinsland2022/{id}.stats.json'))
+    flight['stats'] = json.load(open(f'_stats/{id}.stats.json'))
 
     if pid not in flights:
         flights[pid] = []
@@ -127,7 +127,7 @@ for pid, pflights in flights.items():
 
         is_hike = False
         if f['TakeoffWaypointName'] == "Schauinsland" and int(f['CountComments']) > 0:
-            comments = json.load(open(f'schauinsland2022/{id}.comments.json'))
+            comments = json.load(open(f'_flights/{id}.comments.json'))
             for c in comments['data']:
                 if bool(hike_and_fly_re.search(c["CommentText"])):
                     is_hike = True
@@ -198,7 +198,7 @@ for pid, pflights in flights.items():
     data['points'] = points
     pilottemplate\
       .stream(data) \
-      .dump(open(f'schauinsland2022/out/pilot{pid}.html', 'w'))
+      .dump(open(f'_out/pilot{pid}.html', 'w'))
 
 
 # Write main website
@@ -210,7 +210,7 @@ data = {}
 data['pilots'] = pilots
 env.get_template("index.html") \
   .stream(data) \
-  .dump(open(f'schauinsland2022/out/index.html', 'w'))
+  .dump(open(f'_out/index.html', 'w'))
 
 # Write main map
 
@@ -237,4 +237,4 @@ folium.features.Choropleth(
 for r in [constants.lpradius1, constants.lpradius2, constants.lpradius3]:
     folium.Circle(radius = r, location=constants.landepunkt, color = 'green', fill=True).add_to(m)
 
-m.save("schauinsland2022/out/map.html")
+m.save("_out/map.html")

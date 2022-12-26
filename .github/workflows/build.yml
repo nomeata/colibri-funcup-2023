@@ -15,25 +15,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Cache output
-      uses: actions/cache@v3
-      with:
-        key:  website-${{ github.run_id }}
-        restore-keys:  website-
-        path: schauinsland2022
     - run: pip install -r requirements.txt
     - run: rm -f schauinsland2022/flights.json
-    - run: ./makeall.sh
+    - run: ./prepare.sh
       env:
         DHV_USERNAME: ${{ secrets.DHV_USERNAME }}
         DHV_PASSWORD: ${{ secrets.DHV_PASSWORD }}
+    - run: ./fetch-flights.sh
+    - name: Cache downloads
+      uses: actions/cache@v3
+      with:
+        key:  flights-1-${{hashFiles('_tmp/flights.json')}}
+        restore-keys:  flights-1-
+        path: _flights
+    - run: ./fetch-igc.sh
+    - name: Cache stats
+      uses: actions/cache@v3
+      with:
+        key:  stats-${{hashFiles('*.py')}}-${{hashFiles('_tmp/flights.json')}}
+        restore-keys:  stats-${{hashFiles('*.py')}}-
+        path: _stats
+    - run: ./flightstats.sh
+    - run: ./sektoren-map.py
+    - run: ./website.py
+
     - name: Setup Pages
       uses: actions/configure-pages@v2
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        # Upload entire repository
-        path: 'schauinsland2022/out'
+        path: '_out'
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1

@@ -2,10 +2,11 @@
 
 set -e
 
-mkdir -p schauinsland2022/out
-./sektoren-geojson.py > sektoren.json
-cp sektoren.json schauinsland2022/out
-./fetch.sh
-./by_pilot.py
-./pilot-maps.sh
+
+./prepare.sh
+./fetch-flights.sh
+./fetch-igc.sh
+./flightstats.sh
+
+./sektoren-map.py
 ./website.py
