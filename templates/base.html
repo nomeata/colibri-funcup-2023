@@ -23,5 +23,11 @@ td, th { white-space: nowrap; }
 
 {% block content %}{% endblock %}
 
+<hr/>
+
+
+<footer class="container text-center is-small">
+Letztes Update am {{ now }}. Letzter berücksichtiger Flug von {{ count_flight}} Flügen am {{ last_flight }}.
+</footer>
 </main>
 </html>

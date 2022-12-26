@@ -14,6 +14,8 @@ import folium
 
 import constants
 
+now = datetime.datetime.now().strftime("%m.%d.%Y %H:%M")
+
 hike_and_fly_re = re.compile(r'hike', re.IGNORECASE)
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -63,6 +65,9 @@ for flight in flight_data['data']:
 # Sort by date
 for pid, pflights in flights.items():
     pflights.sort(key = lambda f: f['FlightStartTime'])
+
+# Latest flight
+latest_flight = max([f['FlightStartTime'] for f in flight_data['data']])
 
 # Create per pilot website, and gather stats
 pilots = []
@@ -196,6 +201,9 @@ for pid, pflights in flights.items():
     data['name'] = name
     data['stats'] = stats
     data['points'] = points
+    data['now'] = now
+    data['latest_flight'] = latest_flight
+    data['count_flight'] = len(flight_data['data'])
     pilottemplate\
       .stream(data) \
       .dump(open(f'_out/pilot{pid}.html', 'w'))
@@ -208,6 +216,9 @@ for i, p in enumerate(pilots):
 
 data = {}
 data['pilots'] = pilots
+data['now'] = now
+data['latest_flight'] = latest_flight
+data['count_flight'] = len(flight_data['data'])
 env.get_template("index.html") \
   .stream(data) \
   .dump(open(f'_out/index.html', 'w'))
