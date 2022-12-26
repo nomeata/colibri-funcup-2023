@@ -179,16 +179,16 @@ for pid, pflights in flights.items():
 
     # Calculate points
     points = {
-        'schauiflights': stats['schauiflights'] * 5,
-        'lindenflights': stats['lindenflights'] * 10,
-        'flighttime': stats['flighttime'] // 60,
-        'hikes': stats['hikes'] * 20,
-        'fotos': stats['fotos'] * 50,
-        'sektoren': stats['sektoren'] * 100,
-        'landepunkt1': stats['landepunkt1'] * 100,
-        'landepunkt2': stats['landepunkt2'] * 100,
-        'landepunkt3': stats['landepunkt3'] * 100,
-        'drehueberschuss': stats['drehueberschuss'] * -20,
+        'schauiflights':   stats['schauiflights']   * 5,
+        'lindenflights':   stats['lindenflights']   * 5,
+        'flighttime':      stats['flighttime']      // 60,
+        'hikes':           stats['hikes']           * 120,
+        'fotos':           stats['fotos']           * 3,
+        'sektoren':        stats['sektoren']        * 42,
+        'landepunkt1':     stats['landepunkt1']     * 100,
+        'landepunkt2':     stats['landepunkt2']     * 25,
+        'landepunkt3':     stats['landepunkt3']     * 5,
+        'drehueberschuss': stats['drehueberschuss'] * -1,
     }
     points['total'] = sum(points.values())
 
