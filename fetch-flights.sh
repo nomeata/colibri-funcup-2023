@@ -14,6 +14,6 @@ wget \
 echo -n "Flights before opt-out: "
 jq '.data | length' < _tmp/flights.json.tmp
 # pilot opt-out
-jq '.data |= map(select(.FKPilot != "14677"  ))' < _tmp/flights.json.tmp > _tmp/flights.json
+jq '.data |= map(select(.FKPilot != "14677" and .FKPilot != "1284" ))' < _tmp/flights.json.tmp > _tmp/flights.json
 echo -n "Flights after opt-out: "
 jq '.data | length' < _tmp/flights.json
