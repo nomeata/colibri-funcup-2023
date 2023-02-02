@@ -62,25 +62,17 @@ def midpoint(s):
         assert (sektor_of_point(p) == s)
         return p
 
-def geojson():
-    features = []
-
+def sektoren_daten():
+    sektoren = []
     smoothness = 2
 
     for i in range(rings-1):
         if i == 0:
             r = radius[0]
             pts = smoothness * segments[0]
-            ps = [ lonlat(point(bearing * 360 / pts, r*1000)) for bearing in range(pts) ]
+            ps = [ point(bearing * 360 / pts, r*1000) for bearing in range(pts) ]
 
-            features += [{
-                "type": "Feature",
-                "id": sektorname((0,0)),
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [ps],
-                }
-            }]
+            sektoren += [(sektorname((0,0)), ps)]
         else:
             r     = radius[i-1]
             rnext = radius[i]
@@ -100,15 +92,22 @@ def geojson():
                   for db in range(outer_smootheness+1) ]
                 bearings_outer.reverse()
 
-                ps = [ lonlat(point(b, r*1000)) for b in bearings_inner ] + \
-                     [ lonlat(point(b, rnext*1000)) for b in bearings_outer ]
-                features += [{
-                    "type": "Feature",
-                    "id": sektorname((i,si)),
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [ps],
-                    }
-                }]
+                ps = [ point(b, r*1000) for b in bearings_inner ] + \
+                     [ point(b, rnext*1000) for b in bearings_outer ]
+                sektoren += [( sektorname((i,si)), ps)]
 
-    return { "type": "FeatureCollection", "features": features }
+    return sektoren
+
+def geojson():
+    return {
+      "type": "FeatureCollection",
+      "features": [
+        { "type": "Feature",
+          "id": name,
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [list(map(lonlat, ps))],
+          }
+        } for (name, ps) in sektoren_daten()
+      ]
+    }
