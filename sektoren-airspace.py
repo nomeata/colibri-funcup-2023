@@ -9,13 +9,18 @@ nmPerm = 0.000539957
 
 smoothness = 2
 
+# generate_coords includes the DP marker, so we remove it
+schaui_coords=generate_coords(lonlat(schaui))[3:]
+
 for i in range(rings-1):
     if i == 0:
         r = radius[0]
         print(f"""
 AC W
 AN {sektorname((0,0))}
-V x={generate_coords(lonlat(schaui))}
+AL 0
+AH UNLIM
+V X={schaui_coords}
 DC {r * nmPerm}
 
 """)
@@ -32,8 +37,10 @@ DC {r * nmPerm}
             print(f"""
 AC W
 AN {sektorname((i,si))}
+AL 0
+AH UNLIM
 V D=-
-V x={generate_coords(lonlat(schaui))}
+V X={schaui_coords}
 DC {r * nmPerm} {bearing1} {bearing2}
 V D=+
 DC {rnext * nmPerm} {bearing2} {bearing1}
