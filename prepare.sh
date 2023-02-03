@@ -4,6 +4,7 @@ set -e
 
 mkdir -p _out
 ./sektoren-geojson.py > sektoren.json
-cp sektoren.json _out
+./sektoren-airspacepy > sektoren-airspace.txt
+cp sektoren.json sektoren-airspace.txt _out
 
 ./login.sh
