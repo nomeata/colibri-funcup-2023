@@ -85,7 +85,39 @@ Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="h
 
 <p>Welche Punktzahl hätten wir, wenn wir alle gemeinsam antreten würden:</p>
 
-<p>Wie korrelieren die verschiedenen Kategorien mit der Gesamtpunktzahl? </p>
+<div style="overflow-x:auto">
+<table class="striped">
+<thead>
+<tr>
+<th class="text-right">Schaui</th>
+<th class="text-right">Linden</th>
+<th class="text-right">⏱</th>
+<th class="text-right">⟲</th>
+<th class="text-right">⟳</th>
+<th class="text-right">◎</th>
+<th class="text-right">⌔</th>
+<th class="text-right">🥾</th>
+<th class="text-right">📷</th>
+<th class="text-right">Punkte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="text-right">{{ total_stats.schauiflights }}</td>
+<td class="text-right">{% if total_stats.lindenflights %}{{ total_stats.lindenflights }}{% endif %}</td>
+<td class="text-right">{{ total_stats.prettyflighttime }}</td>
+<td class="text-right">{{ total_stats.left_turns }}</td>
+<td class="text-right">{{ total_stats.right_turns }}</td>
+<td class="text-right">{{ total_stats.landepunkt1 }} / {{ total_stats.landepunkt2 }} / {{ total_stats.landepunkt3 }} </td>
+<td class="text-right">{{ total_stats.sektoren }}</td>
+<td class="text-right">{% if total_stats.hikes %}{{ total_stats.hikes }}{% endif %}</td>
+<td class="text-right">{% if total_stats.fotos %}{{ total_stats.fotos }}{% endif %}</td>
+<td class="text-right">{{ total_points.total }}</td>
+</tr>
+</tbody></table>
+</div>
+
+<p>Wie korrelieren die verschiedenen Kategorien mit der Gesamtpunktzahl? (Was das zu bedeuten hat? Wer weiß…)</p>
 
 <div style="overflow-x:auto" class="is-horizontal-align">
 <table class="striped">
@@ -94,7 +126,7 @@ Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="h
 <th class="text-right">Schaui</th>
 <th class="text-right">Linden</th>
 <th class="text-right">⏱</th>
-<th class="text-right">⟳</th>
+<th class="text-right">|⟲-⟳|</th>
 <th class="text-right">◎</th>
 <th class="text-right">⌔</th>
 <th class="text-right">🥾</th>

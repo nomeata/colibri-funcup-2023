@@ -73,6 +73,32 @@ if flight_data['data']:
 else:
     latest_flight = "(noch keinen gesehen)"
 
+def finalize_stats(stats, covered):
+    stats['sektoren'] = len(covered)
+    if stats['left_turns'] > stats['right_turns']:
+        stats['drehrichtung'] = "(nach links)"
+        stats['drehueberschuss'] = stats['left_turns'] - stats['right_turns']
+    elif stats['left_turns'] < stats['right_turns']:
+        stats['drehrichtung'] = "(nach rechts)"
+        stats['drehueberschuss'] = stats['right_turns'] - stats['left_turns']
+    stats['prettyflighttime'] = pretty_duration(stats['flighttime'])
+
+def points_of_stats(stats):
+    points = {
+        'schauiflights':   stats['schauiflights']   * 5,
+        'lindenflights':   stats['lindenflights']   * 5,
+        'flighttime':      stats['flighttime']      // 60,
+        'hikes':           stats['hikes']           * 120,
+        'fotos':           stats['fotos']           * 3,
+        'sektoren':        stats['sektoren']        * 42,
+        'landepunkt1':     stats['landepunkt1']     * 100,
+        'landepunkt2':     stats['landepunkt2']     * 25,
+        'landepunkt3':     stats['landepunkt3']     * 5,
+        'drehueberschuss': stats['drehueberschuss'] * -1,
+    }
+    points['total'] = sum(points.values())
+    return points
+
 # Create per pilot website, and gather stats
 pilots = []
 pilottemplate = env.get_template("pilot.html")
@@ -164,40 +190,22 @@ for pid, pflights in flights.items():
         })
 
     # Finalize stats
-    stats['sektoren'] = len(covered)
-    if stats['left_turns'] > stats['right_turns']:
-        stats['drehrichtung'] = "(nach links)"
-        stats['drehueberschuss'] = stats['left_turns'] - stats['right_turns']
-    elif stats['left_turns'] < stats['right_turns']:
-        stats['drehrichtung'] = "(nach rechts)"
-        stats['drehueberschuss'] = stats['right_turns'] - stats['left_turns']
-    stats['prettyflighttime'] = pretty_duration(stats['flighttime'])
+    finalize_stats(stats, covered)
 
+    # Sektor heat map
     for s in covered:
         if s not in sektor_pilots:
             sektor_pilots[s] = 0
         sektor_pilots[s] += 1
 
     # Calculate points
-    points = {
-        'schauiflights':   stats['schauiflights']   * 5,
-        'lindenflights':   stats['lindenflights']   * 5,
-        'flighttime':      stats['flighttime']      // 60,
-        'hikes':           stats['hikes']           * 120,
-        'fotos':           stats['fotos']           * 3,
-        'sektoren':        stats['sektoren']        * 42,
-        'landepunkt1':     stats['landepunkt1']     * 100,
-        'landepunkt2':     stats['landepunkt2']     * 25,
-        'landepunkt3':     stats['landepunkt3']     * 5,
-        'drehueberschuss': stats['drehueberschuss'] * -1,
-    }
-    points['total'] = sum(points.values())
+    points = points_of_stats(stats)
 
     pilots.append({
         'pid': pid,
         'name': name,
         'stats': stats,
-        'points': points,
+        'points': points_of_stats(stats),
     })
 
     # Write per-pilot website
@@ -222,12 +230,24 @@ for i, p in enumerate(pilots):
 corr = pd.DataFrame([ dict(p['points'], rank=-p['rank']) for p in pilots ]).corr()
 total_corr = corr["total"]*100
 
+# Total stats
+total_stats = {}
+for k in ['schauiflights', 'lindenflights', 'flighttime', 'hikes', 'fotos',
+          'landepunkt1', 'landepunkt2', 'landepunkt3', 'left_turns', 'right_turns']:
+    total_stats[k] = 0
+    for p in pilots:
+        total_stats[k] += p['stats'][k]
+finalize_stats(total_stats, sektor_pilots)
+total_points = points_of_stats(total_stats)
+
 # Write main website
 data = {}
 data['pilots'] = pilots
 data['now'] = now
 data['latest_flight'] = latest_flight
 data['count_flight'] = len(flight_data['data'])
+data['total_stats'] = total_stats
+data['total_points'] = total_points
 data['total_corr'] = total_corr
 env.get_template("index.html") \
   .stream(data) \
