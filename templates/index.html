@@ -68,6 +68,7 @@
 
 {% endif %}
 
+<section>
 <h2>Info</h2>
 
 <p>Dies ist der Funcup des <a href="https://gsccolibri.de/">GSC Colibri Freiburg e.V.</a>. Für Details zur Auswertung siehe die <a href="https://www.gsccolibri.de/wettkampf/funcup/">Ausschreibung</a>.
@@ -75,5 +76,44 @@ Die Sektoren können auch als <a href="./sektoren-airspace.txt">Luftraum-Datei i
 Fragen werden im Slack-Kanal <tt>#funcup</tt> beantwortet.
 Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="https://github.com/nomeata/colibri-funcup-2023">GitHub</a> inspiziert werden.
 </p>
+</section>
+
+<section>
+<h2>Statistiken</h2>
+
+<p>Im Folgenden ein paar mehr oder weniger sinnvolle Statistiken.</p>
+
+<p>Welche Punktzahl hätten wir, wenn wir alle gemeinsam antreten würden:</p>
+
+<p>Wie korrelieren die verschiedenen Kategorien mit der Gesamtpunktzahl? </p>
+
+<div style="overflow-x:auto" class="is-horizontal-align">
+<table class="striped">
+<thead>
+<tr>
+<th class="text-right">Schaui</th>
+<th class="text-right">Linden</th>
+<th class="text-right">⏱</th>
+<th class="text-right">⟳</th>
+<th class="text-right">◎</th>
+<th class="text-right">⌔</th>
+<th class="text-right">🥾</th>
+<th class="text-right">📷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="text-right">{{ total_corr.schauiflights | round | int }}%</td>
+<td class="text-right">{{ total_corr.lindenflights | round | int }}%</td>
+<td class="text-right">{{ total_corr.flighttime | round |int }}%</td>
+<td class="text-right">{{ total_corr.drehueberschuss | round |int }}%</td>
+<td class="text-right">{{ total_corr.landepunkt1 | round |int }}% / {{ total_corr.landepunkt2 | round |int }}% / {{ total_corr.landepunkt3 | round |int }}% </td>
+<td class="text-right">{{ total_corr.sektoren | round |int }}%</td>
+<td class="text-right">{{ total_corr.hikes | round |int }}%</td>
+<td class="text-right">{{ total_corr.fotos | round |int }}%</td>
+</tr>
+</tbody></table>
+</div>
+</section>
 
 {% endblock %}

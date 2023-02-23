@@ -9,6 +9,7 @@ import math
 import shutil
 import datetime
 import re
+import numpy as np
 import pandas as pd
 import folium
 
@@ -212,16 +213,22 @@ for pid, pflights in flights.items():
       .dump(open(f'_out/pilot{pid}.html', 'w'))
 
 
-# Write main website
+# Sort pilots
 pilots.sort(key = lambda p: - p['points']['total'])
 for i, p in enumerate(pilots):
     p['rank'] = i + 1
 
+# Correlations
+corr = pd.DataFrame([ dict(p['points'], rank=-p['rank']) for p in pilots ]).corr()
+total_corr = corr["total"]*100
+
+# Write main website
 data = {}
 data['pilots'] = pilots
 data['now'] = now
 data['latest_flight'] = latest_flight
 data['count_flight'] = len(flight_data['data'])
+data['total_corr'] = total_corr
 env.get_template("index.html") \
   .stream(data) \
   .dump(open(f'_out/index.html', 'w'))

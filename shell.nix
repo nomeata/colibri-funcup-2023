@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     python3Packages.geographiclib
     python3Packages.snakeviz
     python3Packages.jinja2
-
+    python3Packages.numpy
     ( python3Packages.buildPythonPackage rec {
       pname = "pyopenair";
       version = "1.1.0"; # 1.2.0 needs shapely-2
