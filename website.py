@@ -17,7 +17,7 @@ import constants
 
 now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-hike_and_fly_re = re.compile(r'hike', re.IGNORECASE)
+hike_and_fly_re = re.compile(r'\bhike\b', re.IGNORECASE)
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 env = Environment(
