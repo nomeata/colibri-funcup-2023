@@ -38,7 +38,7 @@
 {% for p in pilots %}
 <tr>
 <td>{{ p.rank }}</td>
-<td><a href="pilot{{p.pid}}.html"?>{{ p.name }}</a></td>
+<td><a href="pilot{{p.pid}}.html">{{ p.name }}</a></td>
 <td class="text-right">{{ p.stats.schauiflights }}</td>
 <td class="text-right">{% if p.stats.lindenflights %}{{ p.stats.lindenflights }}{% endif %}</td>
 <td class="text-right">{{ p.stats.prettyflighttime }}</td>
@@ -146,6 +146,47 @@ Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="h
 </tr>
 </tbody></table>
 </div>
+
+<p>Und wer sind die größten und kleinsten Drehwürmer (ab 100 Kreisen):</p>
+
+<div style="overflow-x:auto" class="is-horizontal-align">
+<table class="striped">
+<thead>
+<tr>
+<th class="text-left">Kategorie</th>
+<th class="text-left">Pilot</th>
+<th class="text-right">Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ausgeglichensder Dreher (relative Differenz)</td>
+<td><a href="pilot{{turn_stats.least_rel_diff.1}}.html">{{ turn_stats.least_rel_diff.0 }}</a></td>
+<td class="text-right">{{ turn_stats.least_rel_diff.2 | round | int }}%</td>
+</tr>
+<tr>
+<td>Größter Linksdreher (relative Differenz)</td>
+<td><a href="pilot{{turn_stats.max_rel_diff_left.1}}.html">{{ turn_stats.max_rel_diff_left.0 }}</a></td>
+<td class="text-right">{{ turn_stats.max_rel_diff_left.2 | round | int }}%</td>
+</tr>
+<tr>
+<td>Größter Linksdreher (absolute Differenz)</td>
+<td><a href="pilot{{turn_stats.max_abs_diff_left.1}}.html">{{ turn_stats.max_abs_diff_left.0 }}</a></td>
+<td class="text-right">{{ turn_stats.max_abs_diff_left.2 | round | int }}</td>
+</tr>
+<tr>
+<td>Größter Rechtsdreher (relative Differenz)</td>
+<td><a href="pilot{{turn_stats.max_rel_diff_right.1}}.html">{{ turn_stats.max_rel_diff_right.0 }}</a></td>
+<td class="text-right">{{ turn_stats.max_rel_diff_right.2 | round | int }}%</td>
+</tr>
+<tr>
+<td>Größter Rechtsdreher (absolute Differenz)</td>
+<td><a href="pilot{{turn_stats.max_abs_diff_right.1}}.html">{{ turn_stats.max_abs_diff_right.0 }}</a></td>
+<td class="text-right">{{ turn_stats.max_abs_diff_right.2 | round | int }}</td>
+</tr>
+</tbody></table>
+</div>
+
 </section>
 
 {% endblock %}

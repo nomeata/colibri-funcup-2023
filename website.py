@@ -226,6 +226,37 @@ pilots.sort(key = lambda p: - p['points']['total'])
 for i, p in enumerate(pilots):
     p['rank'] = i + 1
 
+# Turn statistics
+turn_stats = {
+  'least_rel_diff': min(
+    [ (p['name'], p['pid'],
+      100 * abs(p['stats']['left_turns'] - p['stats']['right_turns']) / \
+      (p['stats']['left_turns'] + p['stats']['right_turns']))
+    for p in pilots if (p['stats']['left_turns'] + p['stats']['right_turns']) > 100
+    ], key = lambda pair: pair[2]),
+  'max_rel_diff_left': max(
+    [ (p['name'], p['pid'],
+      100 * (p['stats']['left_turns'] - p['stats']['right_turns']) / \
+      (p['stats']['left_turns'] + p['stats']['right_turns']))
+    for p in pilots if (p['stats']['left_turns'] + p['stats']['right_turns']) > 100
+    ], key = lambda pair: pair[2]),
+  'max_abs_diff_left': max(
+    [ (p['name'], p['pid'], (p['stats']['left_turns'] - p['stats']['right_turns']))
+    for p in pilots if (p['stats']['left_turns'] + p['stats']['right_turns']) > 100
+    ], key = lambda pair: pair[2]),
+  'max_rel_diff_right': max(
+    [ (p['name'], p['pid'],
+      100 * (p['stats']['right_turns'] - p['stats']['left_turns']) / \
+      (p['stats']['left_turns'] + p['stats']['right_turns']))
+    for p in pilots if (p['stats']['left_turns'] + p['stats']['right_turns']) > 100
+    ], key = lambda pair: pair[2]),
+  'max_abs_diff_right': max(
+    [ (p['name'], p['pid'], (p['stats']['right_turns'] - p['stats']['left_turns']))
+    for p in pilots if (p['stats']['left_turns'] + p['stats']['right_turns']) > 100
+    ], key = lambda pair: pair[2]),
+}
+
+
 # Correlations
 corr = pd.DataFrame([ dict(p['points'], rank=-p['rank']) for p in pilots ]).corr()
 total_corr = corr["total"]*100
@@ -249,6 +280,7 @@ data['count_flight'] = len(flight_data['data'])
 data['total_stats'] = total_stats
 data['total_points'] = total_points
 data['total_corr'] = total_corr
+data['turn_stats'] = turn_stats
 env.get_template("index.html") \
   .stream(data) \
   .dump(open(f'_out/index.html', 'w'))
