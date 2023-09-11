@@ -31,6 +31,7 @@
 <th class="text-right">⌔</th>
 <th class="text-right">🥾</th>
 <th class="text-right">📷</th>
+<th class="text-right">⭐</th>
 <th class="text-right">Punkte</th>
 </tr>
 </thead>
@@ -48,6 +49,7 @@
 <td class="text-right">{{ p.stats.sektoren }}</td>
 <td class="text-right">{% if p.stats.hikes %}{{ p.stats.hikes }}{% endif %}</td>
 <td class="text-right">{% if p.stats.fotos %}{{ p.stats.fotos }}{% endif %}</td>
+<td class="text-right">{% if p.stats.sonderwertung %}{{ p.stats.sonderwertung }}{% endif %}</td>
 <td class="text-right">{{ p.points.total }}</td>
 </tr>
 {% endfor %}
@@ -98,6 +100,7 @@ Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="h
 <th class="text-right">⌔</th>
 <th class="text-right">🥾</th>
 <th class="text-right">📷</th>
+<th class="text-right">⭐</th>
 <th class="text-right">Punkte</th>
 </tr>
 </thead>
@@ -112,6 +115,7 @@ Die Programmierung der Seite, erstellt von Joachim Breitner, kann auf <a href="h
 <td class="text-right">{{ total_stats.sektoren }}</td>
 <td class="text-right">{% if total_stats.hikes %}{{ total_stats.hikes }}{% endif %}</td>
 <td class="text-right">{% if total_stats.fotos %}{{ total_stats.fotos }}{% endif %}</td>
+<td class="text-right">{% if total_stats.sonderwertung %}{{ total_stats.sonderwertung }}{% endif %}</td>
 <td class="text-right">{{ total_points.total }}</td>
 </tr>
 </tbody></table>

@@ -95,6 +95,7 @@ def points_of_stats(stats):
         'landepunkt2':     stats['landepunkt2']     * 25,
         'landepunkt3':     stats['landepunkt3']     * 5,
         'drehueberschuss': stats['drehueberschuss'] * -1,
+        'sonderwertung':   stats['sonderwertung']   * 400,
     }
     points['total'] = sum(points.values())
     return points
@@ -123,8 +124,11 @@ for pid, pflights in flights.items():
         'drehueberschuss': 0,
         'left_turns': 0,
         'right_turns': 0,
+        'sonderwertung': 0,
     }
 
+    if pid == '10564':
+        stats['sonderwertung'] += 1
 
     data = {}
     data['lpradius1'] = constants.lpradius1
@@ -205,7 +209,7 @@ for pid, pflights in flights.items():
         'pid': pid,
         'name': name,
         'stats': stats,
-        'points': points_of_stats(stats),
+        'points': points,
     })
 
     # Write per-pilot website
@@ -264,7 +268,8 @@ total_corr = corr["total"]*100
 # Total stats
 total_stats = {}
 for k in ['schauiflights', 'lindenflights', 'flighttime', 'hikes', 'fotos',
-          'landepunkt1', 'landepunkt2', 'landepunkt3', 'left_turns', 'right_turns']:
+          'landepunkt1', 'landepunkt2', 'landepunkt3', 'left_turns', 'right_turns',
+          'sonderwertung']:
     total_stats[k] = 0
     for p in pilots:
         total_stats[k] += p['stats'][k]
