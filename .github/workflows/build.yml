@@ -3,9 +3,9 @@ on:
  push:
    braches:
    - main
- schedule:
+ #schedule:
    # * is a special character in YAML so you have to quote this string
-   - cron: '23 12,16,18,20,22 * * *'
+   #- cron: '23 12,16,18,20,22 * * *'
 
 permissions:
   contents: read
