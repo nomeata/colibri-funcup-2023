@@ -12,6 +12,7 @@ import re
 import numpy as np
 import pandas as pd
 import folium
+import csv
 
 import constants
 
@@ -105,6 +106,7 @@ pilots = []
 pilottemplate = env.get_template("pilot.html")
 sektor_pilots = {}
 sektor_flights = {}
+all_flights = []
 for pid, pflights in flights.items():
     name = pflights[0]['FirstName'] + ' ' + pflights[0]['LastName']
     covered = set()
@@ -182,20 +184,27 @@ for pid, pflights in flights.items():
         if has_fotos:
             stats['fotos'] += 1
 
-        data['flights'].append({
+        fd = {
+          'pid': pid,
+          'name': name,
           'n': n+1,
           'id': id,
           'datum': datetime.date.fromisoformat(f['FlightDate']).strftime("%d.%m."),
+          'landeplatz': f['TakeoffWaypointName'],
+          'flugzeit_sekunden': f['FlightDuration'],
           'flugzeit': pretty_duration(f['FlightDuration']),
           'linkskreise': f['stats']['left_turns'],
           'rechtskreise': f['stats']['right_turns'],
+          'landepunktabstand_meter': f['stats']['landepunktabstand'],
           'landepunktabstand': pretty_landepunktabstand(f['stats']['landepunktabstand']),
           'neue_sektoren': " ".join(sorted(list(new))),
           'neue_sektoren_anzahl': len(new),
           'fotos': has_fotos,
           'hike': is_hike,
           'url': f"https://de.dhv-xc.de/flight/{id}",
-        })
+        }
+        data['flights'].append(fd)
+        all_flights.append(fd)
 
     # Finalize stats
     finalize_stats(stats, covered)
@@ -320,3 +329,11 @@ for r in [constants.lpradius1, constants.lpradius2, constants.lpradius3]:
     folium.Circle(radius = r, location=constants.landepunkt, color = 'green', fill=True).add_to(m)
 
 m.save("_out/map.html")
+
+# Write Flight data to CSV file
+
+with open('flights.csv', 'w', newline='') as csvfile:
+    w = csv.DictWriter(csvfile, all_flights[0].keys())
+    w.writeheader()
+    for fd in all_flights:
+        w.writerow(fd)
